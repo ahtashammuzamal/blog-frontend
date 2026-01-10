@@ -87,7 +87,7 @@ function Field({
       data-slot="field"
       data-orientation={orientation}
       className={cn(fieldVariants({ orientation }), className)}
-      {...props} />
+      {...props}/>
   );
 }
 

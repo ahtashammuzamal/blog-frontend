@@ -11,6 +11,9 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Private/Dashboard";
 import CreateBlog from "./pages/Private/CreateBlog";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +23,22 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "blogs", element: <BlogsList /> },
       { path: "blogs/:blog", element: <BlogDetails /> },
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "create", element: <CreateBlog /> },
+      {
+        path: "dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "create",
+        element: (
+          <ProtectedRoute>
+            <CreateBlog />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
@@ -36,6 +53,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <Toaster richColors position="top-right" />
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
