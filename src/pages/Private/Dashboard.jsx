@@ -1,10 +1,26 @@
+import { getProfileApi } from "@/api/auth.api";
 import IconButton from "@/components/common/IconButton";
+import MyBlog from "@/components/MyBlog";
 import { Card } from "@/components/ui/card";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
-import { Calendar, Clock, Dot, File, SquarePen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { File, SquarePen } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
+  const [myBlogs, setMyBlogs] = useState([]);
+
+  useEffect(() => {
+    const fetchMyBlogs = async () => {
+      try {
+        const res = await getProfileApi();
+        console.log(res.data.blogs);
+        setMyBlogs(res.data.blogs);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchMyBlogs();
+  }, []);
+
   return (
     <div className="md:max-w-2xl md:mx-auto mt-8 px-4 md:px-0">
       <div className="flex items-center justify-between">
@@ -22,54 +38,26 @@ const Dashboard = () => {
           </div>
           <div>
             <h3 className="text-xl font-medium">Your Stories</h3>
-            <p>You have published 2 stories</p>
+            <p>You have published {myBlogs?.length} stories</p>
           </div>
         </div>
       </Card>
 
       <div className="space-y-6">
         <h2 className="font-medium text-2xl">Your Posts</h2>
-        <Link to={"/blogs/1"}>
-          <Card className="px-4 md:flex-row">
-            <div className="w-full md:max-w-32">
-              <AspectRatio>
-                <img
-                  src="/src/assets/demo.webp"
-                  alt="preview"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </AspectRatio>
-            </div>
-            <div className="space-y-4">
-              <h2 className="font-semibold text-xl">
-                The Art of Minimalism in Modern Design
-              </h2>
-              <div className="flex gap-2">
-                <span className="bg-gray-200 text-gray-500 px-2 text-sm rounded-2xl">
-                  Typography
-                </span>
-                <span className="flex">
-                  <Dot />
-                  <span className="flex items-center gap-1">
-                    <Clock className="text-gray-600" size={15} />
-                    <p className="text-gray-600">6 min read</p>
-                  </span>
-                </span>
-                <span className="flex">
-                  <Dot />
-                  <span className="flex items-center gap-1">
-                    <Calendar className="text-gray-600" size={15} />
-                    <p className="text-gray-600">7 days ago</p>
-                  </span>
-                </span>
-              </div>
-              <p>
-                Exploring how less becomes more in contemporary design practices
-                and why minimalism continues to dominate visual aesthetics.
-              </p>
-            </div>
-          </Card>
-        </Link>
+        {myBlogs.map((blog) => (
+          <div>
+            <MyBlog
+              key={blog._id}
+              to={blog._id}
+              title={blog.title}
+              description={blog.description}
+              imageURL={blog.imageURL}
+              createdAt={blog.createdAt}
+              updatedAt={blog.updatedAt}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

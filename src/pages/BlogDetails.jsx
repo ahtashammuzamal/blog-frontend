@@ -1,4 +1,4 @@
-import { getBlogById } from "@/api/blog.api";
+import { getBlogByIdApi } from "@/api/blog.api";
 import IconButton from "@/components/common/IconButton";
 import { Spinner } from "@/components/ui/spinner";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
@@ -14,7 +14,7 @@ const BlogDetails = () => {
   useEffect(() => {
     const fetchBlogDetails = async () => {
       try {
-        const { data } = await getBlogById(blogId);
+        const { data } = await getBlogByIdApi(blogId);
         setBlog(data.blog);
       } catch (error) {
         console.error(error);
@@ -59,9 +59,7 @@ const BlogDetails = () => {
           </div>
 
           <div>
-            <h1 className="text-4xl font-semibold mb-8">
-              {blog.title}
-            </h1>
+            <h1 className="text-4xl font-semibold mb-8">{blog.title}</h1>
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
               <img
                 src={blog.imageURL}
@@ -69,9 +67,7 @@ const BlogDetails = () => {
                 className="rounded-lg object-cover h-full w-full"
               />
             </AspectRatio>
-            <p className="mt-8 text-xl text-gray-600">
-              {blog.description}
-            </p>
+            <p className="mt-8 text-xl text-gray-600">{blog.description}</p>
           </div>
         </div>
       )}

@@ -14,6 +14,8 @@ import CreateBlog from "./pages/Private/CreateBlog";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Toaster } from "sonner";
+import CreateBlogForm from "./components/CreateBlogForm";
+import EditBlogForm from "./components/EditBlogForm";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "blogs", element: <BlogsList /> },
       { path: "blogs/:blog", element: <BlogDetails /> },
+      { path: "test", element: <CreateBlogForm /> }, //to remove
       {
         path: "dashboard",
         element: (
@@ -36,6 +39,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <CreateBlog />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "edit/:id",
+        element: (
+          <ProtectedRoute>
+            <EditBlogForm />
           </ProtectedRoute>
         ),
       },

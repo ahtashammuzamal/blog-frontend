@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const res = await getProfileApi();
-        setUser(res.data.profile);
+        setUser(res.data.user);
       } catch (error) {
         removeToken();
         console.error(error);
@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }) => {
   const register = async (credentials) => {
     try {
       const res = await registerApi(credentials);
-      console.log(res.data);
       setToken(res.data.token);
       setUser(res.data.user);
     } catch (error) {
