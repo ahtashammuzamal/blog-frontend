@@ -1,4 +1,4 @@
-import CreateBlogForm from "@/components/CreateBlogForm";
+import CreateBlogForm from "@/components/dashboard/CreateBlogForm";
 
 const CreateBlog = () => {
   return <CreateBlogForm />;

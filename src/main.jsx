@@ -3,19 +3,19 @@ import { createRoot } from "react-dom/client";
 import "./styles/index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
-import Layout from "./pages/Layout";
-import BlogsList from "./pages/BlogsList";
+import Layout from "./components/layout/Layout";
 import BlogDetails from "./pages/BlogDetails";
-import AuthLayout from "./pages/AuthLayout";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+import AuthLayout from "./components/layout/AuthLayout";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 import Dashboard from "./pages/Private/Dashboard";
 import CreateBlog from "./pages/Private/CreateBlog";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/dashboard/ProtectedRoute";
 import { Toaster } from "sonner";
-import CreateBlogForm from "./components/CreateBlogForm";
-import EditBlogForm from "./components/EditBlogForm";
+import CreateBlogForm from "./components/dashboard/CreateBlogForm";
+import EditBlogForm from "./components/dashboard/EditBlogForm";
+import Blogs from "./pages/Blogs";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "blogs", element: <BlogsList /> },
+      { path: "blogs", element: <Blogs /> },
       { path: "blogs/:blog", element: <BlogDetails /> },
       { path: "test", element: <CreateBlogForm /> }, //to remove
       {

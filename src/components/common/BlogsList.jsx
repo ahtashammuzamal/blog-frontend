@@ -1,8 +1,8 @@
-import BlogCard from "@/components/BlogCard";
-
-import { getAllBlogs } from "@/api/blog.api";
+import { getAllBlogsApi } from "@/api/blog.api";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/ui/spinner";
+import BlogCard from "../BlogCard";
+import { Spinner } from "../ui/spinner";
+import CustomSpinner from "./CustomSpinner";
 
 const BlogsList = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,7 +11,7 @@ const BlogsList = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const { data } = await getAllBlogs();
+        const { data } = await getAllBlogsApi();
         setBlogs(data.blogs);
       } catch (error) {
         console.error(error);
@@ -21,20 +21,10 @@ const BlogsList = () => {
     };
     fetchBlogs();
   }, []);
-
   return (
-    <div className="">
-      <div className="text-center space-y-4 mt-12">
-        <h2 className="text-4xl font-medium">Explore Articles</h2>
-        <p>
-          Discover thoughtful perspectives on design, technology, and
-          creativity.
-        </p>
-      </div>
+    <div>
       {isLoading ? (
-        <div className="min-h-96 flex items-center justify-center">
-          <Spinner className={"text-blue-500"} />
-        </div>
+        <CustomSpinner />
       ) : (
         <div className="py-12 px-4 md:px-0 grid sm:grid-cols-2 md:grid-cols-3 gap-8 ">
           {blogs.map((blog) => (
@@ -45,6 +35,7 @@ const BlogsList = () => {
               description={blog.description}
               imageURL={blog.imageURL}
               author={blog.author}
+              createdAt={blog.createdAt}
             />
           ))}
         </div>

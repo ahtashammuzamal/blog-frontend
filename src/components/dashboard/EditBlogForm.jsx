@@ -8,12 +8,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 import { ArrowLeft } from "lucide-react";
-import IconButton from "./common/IconButton";
+import IconButton from "../common/IconButton";
 import { getBlogByIdApi, updateBlogByIdApi } from "@/api/blog.api";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
