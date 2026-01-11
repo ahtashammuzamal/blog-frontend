@@ -16,6 +16,8 @@ import { Toaster } from "sonner";
 import CreateBlogForm from "./components/dashboard/CreateBlogForm";
 import EditBlogForm from "./components/dashboard/EditBlogForm";
 import Blogs from "./pages/Blogs";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/react-query";
 
 const router = createBrowserRouter([
   {
@@ -64,9 +66,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <Toaster richColors position="top-right" />
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Toaster richColors position="top-right" />
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

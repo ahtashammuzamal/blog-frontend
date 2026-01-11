@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
-import { calculateReadingTime, timeAgo } from "@/lib/utils";
+import { calculateReadingTime, timeAgo, truncate } from "@/lib/utils";
 
 const BlogCard = ({ to, title, imageURL, description, author, createdAt }) => {
   return (
@@ -16,8 +16,8 @@ const BlogCard = ({ to, title, imageURL, description, author, createdAt }) => {
           <p className="text-sm text-muted-foreground">
             {calculateReadingTime(description)} • {timeAgo(`${createdAt}`)}
           </p>
-          <h2 className="text-xl font-semibold leading-snug">{title}</h2>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <h2 className="text-xl font-semibold leading-snug">{truncate(title, 30)}</h2>
+          <p className="text-sm text-muted-foreground">{truncate(description, 130)}</p>
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src="/src/assets/author-placeholder.png" />

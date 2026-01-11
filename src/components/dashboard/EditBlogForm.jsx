@@ -17,7 +17,8 @@ import IconButton from "../common/IconButton";
 import { getBlogByIdApi, updateBlogByIdApi } from "@/api/blog.api";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useUpdateBlog from "@/hooks/useUpdateBlog";
 
 const EditBlogForm = () => {
   const [preview, setPreview] = useState("");
@@ -32,6 +33,9 @@ const EditBlogForm = () => {
       image: null,
     },
   });
+
+  const navigate = useNavigate();
+  const { mutate, isPending } = useUpdateBlog();
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -71,12 +75,19 @@ const EditBlogForm = () => {
       formData.append("image", data.image);
     }
 
-    try {
-      const res = await updateBlogByIdApi(id, formData);
-      toast.success(res.data?.message || "Blog updated successfully");
-    } catch (error) {
-      console.error(error);
-    }
+    mutate(
+      { id, data: formData },
+      {
+        onSuccess: () => {
+          toast.success("Blog post updated successfully");
+          navigate(`/blogs/${id}`);
+        },
+        onError: (error) => {
+          console.error(error);
+          toast.error(error);
+        },
+      }
+    );
   };
 
   return (
@@ -146,8 +157,8 @@ const EditBlogForm = () => {
             )}
           />
 
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Updating..." : "Update"}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Updating..." : "Update"}
           </Button>
         </form>
       </Form>

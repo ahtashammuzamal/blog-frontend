@@ -1,6 +1,9 @@
 import { createBlogSchema } from "@/schemas/blogSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+import useCreateBlog from "@/hooks/useCreateBlog";
 import {
   Form,
   FormControl,
@@ -10,12 +13,10 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import IconButton from "../common/IconButton";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { ArrowLeft } from "lucide-react";
-import IconButton from "../common/IconButton";
-import { createBlogApi } from "@/api/blog.api";
-import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogForm = () => {
   const form = useForm({
@@ -27,21 +28,27 @@ const CreateBlogForm = () => {
     },
   });
 
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useCreateBlog();
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("image", data.image);
 
-    try {
-      const res = await createBlogApi(formData);
-      toast.success(res.data?.message || "Published Successfully");
-      
-    } catch (error) {
-      console.error(error);
-    }
-
-    form.reset();
+    mutate(formData, {
+      onSuccess: () => {
+        form.reset();
+        toast.success("Blog post created successfully");
+        navigate("/blogs");
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(error);
+      },
+    });
   };
 
   return (
@@ -107,8 +114,8 @@ const CreateBlogForm = () => {
             )}
           />
 
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Submitting.." : "Submit"}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>

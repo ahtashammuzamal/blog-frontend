@@ -11,17 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { deleteBlogByIdApi } from "@/api/blog.api";
 import { toast } from "sonner";
+import useDeleteBlog from "@/hooks/useDeleteBlog";
 
 const ConfirmDialog = ({ id }) => {
+  const { mutate, isPending } = useDeleteBlog();
+
   const handleDeleteBlog = async () => {
-    try {
-      const res = await deleteBlogByIdApi(id);
-      toast.success(res.data?.message || "Blog post deleted");
-    } catch (error) {
-      console.error(error);
-    }
+    mutate(id, {
+      onSuccess: () => {
+        toast.success("Blog post deleted successfully");
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(error);
+      },
+    });
   };
 
   return (
@@ -44,7 +49,11 @@ const ConfirmDialog = ({ id }) => {
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose>
-            <Button variant="destructive" onClick={handleDeleteBlog}>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteBlog}
+              disabled={isPending}
+            >
               Confirm
             </Button>
           </DialogClose>

@@ -1,45 +1,35 @@
 import { getAllBlogsApi } from "@/api/blog.api";
-import { useEffect, useState } from "react";
 import BlogCard from "../BlogCard";
-import { Spinner } from "../ui/spinner";
 import CustomSpinner from "./CustomSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/queryKeys";
+import { toast } from "sonner";
 
 const BlogsList = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [QUERY_KEYS.BLOGS],
+    queryFn: () => getAllBlogsApi().then((res) => res?.data),
+  });
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const { data } = await getAllBlogsApi();
-        setBlogs(data.blogs);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchBlogs();
-  }, []);
+  if (isLoading) return <CustomSpinner />;
+
+  if (isError)
+    return <div className="min-h-96">{toast.error("Error loading blogs")}</div>;
+
   return (
-    <div>
-      {isLoading ? (
-        <CustomSpinner />
-      ) : (
-        <div className="py-12 px-4 md:px-0 grid sm:grid-cols-2 md:grid-cols-3 gap-8 ">
-          {blogs.map((blog) => (
-            <BlogCard
-              key={blog._id}
-              to={blog._id}
-              title={blog.title}
-              description={blog.description}
-              imageURL={blog.imageURL}
-              author={blog.author}
-              createdAt={blog.createdAt}
-            />
-          ))}
-        </div>
-      )}
+    <div className="py-12 px-4 md:px-0 grid sm:grid-cols-2 md:grid-cols-3 gap-8 ">
+      {isError && toast.error("Error loading blogs")}
+      {data?.blogs?.map((blog) => (
+        <BlogCard
+          key={blog._id}
+          to={blog._id}
+          title={blog.title}
+          description={blog.description}
+          imageURL={blog.imageURL}
+          author={blog.author}
+          createdAt={blog.createdAt}
+        />
+      ))}
     </div>
   );
 };
