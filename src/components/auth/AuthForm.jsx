@@ -44,21 +44,15 @@ const AuthForm = ({ authType }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-      authType === "login" ? await login(data) : await register(data);
-      toast.success(
-        `${
-          authType === "login"
-            ? '"Login successful"'
-            : "Successfully registered"
-        }`
-      );
+      const res =
+        authType === "login" ? await login(data) : await register(data);
+        console.log(res)
+      toast.success(`${res?.data?.message}`);
       navigate("/dashboard");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login failed");
       console.error(error);
     }
-    form.reset();
   };
 
   return (

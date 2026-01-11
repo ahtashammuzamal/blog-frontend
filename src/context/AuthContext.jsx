@@ -6,6 +6,8 @@ import {
   registerApi,
 } from "@/api/auth.api";
 import { getToken, removeToken, setToken } from "@/lib/token";
+import { queryClient } from "@/lib/react-query";
+import { toast } from "sonner";
 
 const AuthContext = createContext(null);
 
@@ -41,9 +43,10 @@ export const AuthProvider = ({ children }) => {
       const res = await loginApi(credentials);
       setToken(res.data.token);
       setUser(res.data.user);
-      return res.data;
+      return res;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 
@@ -52,19 +55,24 @@ export const AuthProvider = ({ children }) => {
       const res = await registerApi(credentials);
       setToken(res.data.token);
       setUser(res.data.user);
+      return res;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await logoutApi();
+      const res = await logoutApi();
+      toast.success(res.data.message);
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message || "Logout failed");
     } finally {
       removeToken();
       setUser(null);
+      queryClient.clear();
     }
   };
 

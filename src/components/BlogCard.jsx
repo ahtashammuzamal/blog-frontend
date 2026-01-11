@@ -6,7 +6,7 @@ import { calculateReadingTime, timeAgo, truncate } from "@/lib/utils";
 const BlogCard = ({ to, title, imageURL, description, author, createdAt }) => {
   return (
     <Link to={`/blogs/${to}`}>
-      <Card className="gap-4 overflow-hidden py-0 shadow-none border-none rounded-none">
+      <Card className="gap-4 overflow-hidden py-0 shadow-none border-none rounded-none bg-transparent">
         <img
           src={imageURL}
           alt="Blog cover"
