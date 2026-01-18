@@ -27,7 +27,6 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "blogs", element: <Blogs /> },
       { path: "blogs/:blog", element: <BlogDetails /> },
-      { path: "test", element: <CreateBlogForm /> }, //to remove
       {
         path: "dashboard",
         element: (
